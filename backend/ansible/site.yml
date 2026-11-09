@@ -1,0 +1,53 @@
+# Push MarshalPOS.XML to POS terminals (Oracle Linux 7, Python 2.7)
+# Same as the manual steps:
+#   copy file -> chown epos -> chgrp epos -> chmod 666 -> reboot
+- name: Deploy MarshalPOS.XML
+  hosts: pos
+  gather_facts: false
+  become: true                     # sudo, using the password from secrets/ansible_become_password
+  vars:
+    marshal_dest: /var/epos/bin/MarshalPOS.XML
+    marshal_owner: epos
+    marshal_group: epos
+    marshal_mode: "0666"
+    pos_reboot: true               # set to false to push without rebooting
+
+  tasks:
+    - name: Check /var/epos/bin exists on the POS
+      ansible.builtin.stat:
+        path: "{{ marshal_dest | dirname }}"
+      register: dest_dir
+
+    - name: Stop if this is not a MarshalPOS terminal
+      ansible.builtin.fail:
+        msg: "{{ marshal_dest | dirname }} not found on {{ inventory_hostname }}"
+      when: not (dest_dir.stat.exists and dest_dir.stat.isdir)
+
+    - name: Backup current MarshalPOS.XML
+      ansible.builtin.copy:
+        src: "{{ marshal_dest }}"
+        dest: "{{ marshal_dest }}.bak-job{{ poscc_job_id }}"
+        remote_src: true
+        mode: preserve
+      failed_when: false           # first deployment: nothing to back up
+
+    - name: Push new MarshalPOS.XML (owner epos, group epos, mode 666)
+      ansible.builtin.copy:
+        src: "{{ xml_src_path }}"  # file uploaded in the GUI
+        dest: "{{ marshal_dest }}"
+        owner: "{{ marshal_owner }}"
+        group: "{{ marshal_group }}"
+        mode: "{{ marshal_mode }}"
+      register: pushed
+
+    - name: Result
+      ansible.builtin.debug:
+        msg: >-
+          {{ xml_filename }} -> {{ marshal_dest }} on {{ inventory_hostname }} ({{ ansible_host }})
+          {{ 'UPDATED' if pushed.changed else 'already identical - no change' }}
+
+    - name: Reboot POS and wait until it is back
+      ansible.builtin.reboot:
+        msg: "MarshalPOS.XML updated by POS Control Center (job {{ poscc_job_id }})"
+        reboot_timeout: 600
+      when: pos_reboot | bool and pushed.changed

@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>POS Enterprise Control Center — Project Overview & Interactive Demo</title>
+<style>
+:root{
+  --bg:#f5f7fb; --bg2:#eef2f8; --panel:#ffffff; --panel2:#f8fafc; --line:#e2e8f0; --line2:#cbd5e1;
+  --text:#0f172a; --muted:#475569; --dim:#64748b; --blue:#2563eb; --blue2:#1d4ed8; --cyan:#0369a1;
+  --green:#059669; --green-bg:#ecfdf5; --red:#dc2626; --red-bg:#fef2f2;
+  --amber:#b45309; --amber-bg:#fffbeb; --r:14px;
+  --mono:"JetBrains Mono","Cascadia Code",Consolas,monospace;
+  --shadow:0 1px 2px rgba(15,23,42,.04),0 4px 14px rgba(15,23,42,.05);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:Inter,"Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif;font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
+a{color:var(--blue)}
+.wrap{max-width:1240px;margin:0 auto;padding:0 28px}
+section{padding:72px 0;border-bottom:1px solid var(--line);background:#fff}
+section:nth-of-type(even){background:var(--bg)}
+h1{font-size:46px;line-height:1.1;letter-spacing:-.02em;font-weight:750}
+h2{font-size:30px;letter-spacing:-.01em;font-weight:700;margin-bottom:8px}
+h3{font-size:17px;font-weight:650}
+.eyebrow{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--blue);margin-bottom:12px}
+.lead{color:var(--muted);font-size:17px;max-width:760px}
+.mono{font-family:var(--mono);font-size:13px}
+.muted{color:var(--muted)} .dim{color:var(--dim)}
+.btn{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line2);background:#fff;color:var(--text);padding:10px 18px;border-radius:10px;font-weight:600;font-size:14px;cursor:pointer;transition:.15s;text-decoration:none}
+.btn:hover{border-color:var(--blue);background:#eff6ff}
+.btn.primary{background:var(--blue2);border-color:var(--blue2);color:#fff}
+.btn.primary:hover{background:var(--blue)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn.lg{padding:14px 26px;font-size:16px}
+.badge{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:999px;font-size:12px;font-weight:700;letter-spacing:.02em}
+.b-ok{background:var(--green-bg);color:var(--green)} .b-bad{background:var(--red-bg);color:var(--red)}
+.b-run{background:#dbeafe;color:var(--blue)} .b-pend{background:#f1f5f9;color:var(--muted)}
+.b-warn{background:var(--amber-bg);color:var(--amber)}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow)}
+.sim{display:inline-flex;align-items:center;gap:8px;border:1px dashed #f59e0b;color:var(--amber);background:var(--amber-bg);padding:5px 12px;border-radius:8px;font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase}
+.sim::before{content:"";width:7px;height:7px;border-radius:50%;background:#f59e0b;animation:pulse 1.6s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.fade{animation:fadeUp .35s ease both}
+
+/* HERO */
+.hero{padding:88px 0 72px;background:radial-gradient(900px 420px at 15% -10%,rgba(37,99,235,.10),transparent 70%),linear-gradient(180deg,#ffffff,#f5f7fb);border-bottom:1px solid var(--line)}
+.hero-grid{display:grid;grid-template-columns:1.25fr 1fr;gap:48px;align-items:center}
+.hero h1 span{color:var(--blue)}
+.hero .quote{margin-top:22px;padding:16px 20px;border-left:3px solid var(--blue);background:#eff6ff;color:#1e3a8a;font-size:15.5px;border-radius:0 10px 10px 0}
+.hero-cta{display:flex;gap:12px;margin-top:28px;flex-wrap:wrap;align-items:center}
+.features{display:grid;gap:10px}
+.feat{display:flex;gap:12px;align-items:flex-start;padding:13px 16px}
+.feat .ic{flex:none;width:34px;height:34px;border-radius:9px;background:#eff6ff;color:var(--blue);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px}
+.feat b{display:block;font-size:14.5px} .feat span{font-size:13px;color:var(--muted)}
+
+/* STORY */
+.story{display:flex;gap:0;margin-top:34px;flex-wrap:wrap}
+.story .st{flex:1;min-width:150px;padding:16px 14px;border:1px solid var(--line);background:#fff;position:relative;margin-left:-1px}
+.story .st:first-child{border-radius:12px 0 0 12px;margin-left:0} .story .st:last-child{border-radius:0 12px 12px 0}
+.story .st small{color:var(--blue);font-weight:700;font-size:11px;letter-spacing:.1em}
+.story .st b{display:block;font-size:14.5px;margin-top:2px}
+.story .st p{font-size:12.5px;color:var(--muted);margin-top:4px}
+.problem-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:34px}
+.problem-grid .card{padding:24px}
+.problem-grid ul{list-style:none;margin-top:12px;display:grid;gap:9px}
+.problem-grid li{display:flex;gap:10px;font-size:14.5px;color:#334155}
+.problem-grid li::before{flex:none;font-weight:800}
+.pr{border-top:3px solid #fca5a5} .so{border-top:3px solid #6ee7b7}
+.pr li::before{content:"✕";color:var(--red)} .so li::before{content:"✓";color:var(--green)}
+
+/* EVOLUTION */
+.evo{width:100%;border-collapse:separate;border-spacing:0;margin-top:30px;overflow:hidden;border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow)}
+.evo th,.evo td{padding:14px 18px;text-align:left;border-bottom:1px solid var(--line);font-size:14.5px}
+.evo thead th{background:#f8fafc;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.evo thead th.new{color:var(--blue);background:#eff6ff}
+.evo tbody tr{background:#fff} .evo tbody tr:hover{background:#f8fafc}
+.evo td:first-child{font-weight:650}
+.evo td.old{color:var(--dim)} .evo td.old::before{content:"— ";color:var(--line2)}
+.evo td.nw{color:var(--text);background:rgba(239,246,255,.45)} .evo td.nw::before{content:"✓ ";color:var(--green);font-weight:800}
+.evo tr:last-child td{border-bottom:0}
+.improve{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:22px}
+.improve .card{padding:18px}
+.improve .n{font-family:var(--mono);color:var(--blue);font-weight:700;font-size:13px}
+.improve b{display:block;margin:4px 0 4px;font-size:15px}
+.improve p{font-size:13px;color:var(--muted)}
+
+/* DEMO SHELL */
+.demo{background:var(--bg2) !important}
+.demo-head{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap;margin-bottom:22px}
+.app{border:1px solid var(--line);border-radius:18px;overflow:hidden;background:var(--bg);box-shadow:0 20px 50px rgba(15,23,42,.10)}
+.app-bar{display:flex;align-items:center;justify-content:space-between;padding:12px 18px;background:#ffffff;border-bottom:1px solid var(--line);gap:12px;flex-wrap:wrap}
+.app-brand{display:flex;align-items:center;gap:10px}
+.logo-ph{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#1c4eb1,#3b82f6);display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff;font-size:15px}
+.app-brand b{font-size:14px;display:block;line-height:1.1} .app-brand small{font-size:11.5px;color:var(--muted)}
+.app-body{display:grid;grid-template-columns:230px 1fr;min-height:640px}
+.steps{border-right:1px solid var(--line);padding:18px 12px;background:#ffffff}
+.steps .sl{font-size:11px;font-weight:700;letter-spacing:.12em;color:var(--dim);text-transform:uppercase;padding:0 10px 10px}
+.step{display:flex;gap:11px;align-items:flex-start;padding:10px;border-radius:10px;cursor:pointer;color:var(--muted);transition:.15s;margin-bottom:2px}
+.step:hover{background:#f1f5f9}
+.step .dot{flex:none;width:26px;height:26px;border-radius:50%;border:2px solid var(--line2);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;margin-top:1px;transition:.2s;background:#fff}
+.step b{display:block;font-size:13.5px;color:var(--text);font-weight:600} .step span{font-size:12px}
+.step.active{background:#eff6ff;box-shadow:inset 3px 0 0 var(--blue)} .step.active .dot{border-color:var(--blue);color:var(--blue)}
+.step.done .dot{background:var(--green);border-color:var(--green);color:#fff}
+.step.locked{opacity:.45;cursor:not-allowed}
+.stage{padding:26px 28px;min-width:0}
+.stage-h{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:20px;flex-wrap:wrap}
+.stage-h h3{font-size:21px}
+.stage-h p{color:var(--muted);font-size:14px;margin-top:3px;max-width:640px}
+.nav{display:flex;gap:10px;justify-content:flex-end;margin-top:22px;padding-top:18px;border-top:1px solid var(--line)}
+
+/* upload */
+.drop{border:2px dashed var(--line2);border-radius:14px;padding:30px;text-align:center;transition:.2s;background:#fff;cursor:pointer}
+.drop.over{border-color:var(--blue);background:#eff6ff}
+.drop .big{font-size:18px;font-weight:650;margin:8px 0 4px}
+.drop .ico{width:52px;height:52px;margin:0 auto;border-radius:14px;background:#eff6ff;color:var(--blue);display:flex;align-items:center;justify-content:center;font-size:24px}
+table.t{width:100%;border-collapse:collapse;font-size:13.5px}
+table.t th{text-align:left;font-size:11.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--dim);font-weight:700;padding:10px 12px;border-bottom:1px solid var(--line);background:#f8fafc}
+table.t td{padding:11px 12px;border-bottom:1px solid #eef2f7;vertical-align:middle}
+table.t tr.new{animation:fadeUp .35s ease both}
+.tbl{border:1px solid var(--line);border-radius:12px;overflow:auto;background:#fff;box-shadow:var(--shadow)}
+.fname{display:flex;align-items:center;gap:9px;font-weight:600}
+.fico{width:26px;height:30px;border-radius:5px;background:#e0f2fe;color:var(--cyan);font-size:9px;font-weight:800;display:flex;align-items:center;justify-content:center;flex:none;font-family:var(--mono)}
+.bar{height:6px;border-radius:6px;background:#e2e8f0;overflow:hidden}
+.bar>i{display:block;height:100%;width:0;background:var(--blue);border-radius:6px;transition:width .3s ease}
+.bar.ok>i{background:#10b981} .bar.bad>i{background:#ef4444}
+.row-flex{display:flex;gap:16px;flex-wrap:wrap}
+.kpis{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin-bottom:18px}
+.kpi{padding:14px 16px}
+.kpi small{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);font-weight:700}
+.kpi b{display:block;font-size:26px;font-weight:750;margin-top:2px}
+.split{display:grid;grid-template-columns:1.45fr 1fr;gap:16px}
+.pipe{display:flex;gap:4px;align-items:center;font-size:11.5px;color:var(--dim);flex-wrap:wrap}
+.pipe i{font-style:normal;padding:2px 7px;border-radius:5px;background:#f1f5f9;transition:.2s}
+.pipe i.on{background:#dbeafe;color:var(--blue)} .pipe i.ok{background:var(--green-bg);color:var(--green)} .pipe i.bad{background:var(--red-bg);color:var(--red)}
+.inv{padding:16px}
+.inv h4{font-size:13px;margin-bottom:10px;display:flex;justify-content:space-between}
+.inv-row{display:grid;grid-template-columns:1.1fr 1.3fr 1fr;gap:6px;font-size:12.5px;padding:7px 8px;border-radius:7px;transition:.25s;font-family:var(--mono)}
+.inv-row.hit{background:var(--green-bg);color:var(--green)}
+.checks{display:grid;gap:7px;margin-top:14px;font-size:13px}
+.checks div{display:flex;gap:8px;color:var(--muted)} .checks div::before{content:"◆";color:var(--blue);font-size:10px;margin-top:4px}
+.msg{font-size:12px;margin-top:3px}
+
+/* deployment */
+.strategy{padding:16px 18px;display:flex;gap:18px;align-items:center;flex-wrap:wrap;margin-bottom:16px}
+.strategy .k{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);font-weight:700}
+.strategy .v{font-weight:650;font-size:14px}
+.orch{display:grid;grid-template-columns:200px 1fr;gap:22px;align-items:center;margin-bottom:16px}
+.ctrl{padding:18px;text-align:center;position:relative}
+.ctrl .ring{width:64px;height:64px;margin:0 auto 10px;border-radius:50%;border:2px solid var(--blue);display:flex;align-items:center;justify-content:center;font-weight:800;color:var(--blue);font-family:var(--mono);background:#eff6ff}
+.ctrl.live .ring{animation:spin 2.4s linear infinite;border-style:dashed}
+@keyframes spin{to{transform:rotate(360deg)}}
+.ctrl b{display:block;font-size:14px} .ctrl small{color:var(--muted);font-size:12px}
+.nodes{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;position:relative}
+.node{padding:14px 15px;position:relative;overflow:hidden;transition:border-color .3s}
+.node.run{border-color:#93c5fd} .node.ok{border-color:#6ee7b7} .node.bad{border-color:#fca5a5}
+.node-top{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.term{display:flex;gap:10px;align-items:center}
+.term .scr{width:38px;height:30px;border-radius:5px;border:2px solid #94a3b8;background:#f1f5f9;position:relative;flex:none}
+.term .scr::after{content:"";position:absolute;left:12px;bottom:-8px;width:10px;height:6px;background:#94a3b8;border-radius:1px}
+.node.run .scr{border-color:var(--blue);background:#dbeafe;box-shadow:0 0 10px rgba(37,99,235,.25)} .node.ok .scr{border-color:#10b981;background:#d1fae5} .node.bad .scr{border-color:#ef4444;background:#fee2e2}
+.term b{font-size:14px;display:block;line-height:1.15} .term small{font-size:11.5px;color:var(--muted);font-family:var(--mono)}
+.node .file{font-size:12px;color:var(--cyan);font-family:var(--mono);margin:9px 0 8px;display:flex;align-items:center;gap:6px}
+.packet{position:absolute;top:0;left:-30%;width:30%;height:2px;background:linear-gradient(90deg,transparent,var(--blue),transparent);opacity:0}
+.node.run .packet{opacity:1;animation:flow 1.1s linear infinite}
+@keyframes flow{to{left:100%}}
+.node .pipe{margin-top:9px}
+.node .meta{display:flex;justify-content:space-between;font-size:11.5px;color:var(--dim);margin-top:7px;font-family:var(--mono)}
+.log{background:#0f172a;border:1px solid #1e293b;border-radius:12px;padding:12px 14px;height:210px;overflow:auto;font-family:var(--mono);font-size:12px;line-height:1.7}
+.log .ts{color:#64748b} .log .ok{color:#34d399} .log .bad{color:#f87171} .log .info{color:#cbd5e1} .log .host{color:#7dd3fc}
+.cmp{padding:16px 18px;margin-top:14px}
+.cmp-row{display:grid;grid-template-columns:150px 1fr 70px;gap:12px;align-items:center;font-size:12.5px;margin-top:9px}
+.cmp-bar{height:12px;border-radius:6px;background:#e2e8f0;position:relative;overflow:hidden}
+.cmp-bar i{position:absolute;top:0;bottom:0;border-radius:4px}
+
+/* report */
+.err{background:var(--red-bg);border:1px solid #fca5a5;border-radius:10px;padding:10px 12px;font-family:var(--mono);font-size:12px;color:#991b1b;margin-top:4px}
+
+/* email */
+.mail-wrap{display:grid;grid-template-columns:300px 1fr;gap:16px}
+.mail-side{padding:16px}
+.store-tab{padding:11px 12px;border-radius:10px;border:1px solid var(--line);margin-bottom:8px;cursor:pointer;transition:.15s;background:#fff}
+.store-tab:hover{border-color:var(--line2)} .store-tab.on{border-color:var(--blue);background:#eff6ff}
+.store-tab b{display:block;font-size:13.5px} .store-tab small{color:var(--muted);font-size:12px}
+.mail{background:#fff;color:#1e293b;border-radius:12px;overflow:hidden;border:1px solid var(--line);box-shadow:var(--shadow)}
+.mail-hdr{background:#f8fafc;border-bottom:1px solid #e2e8f0;padding:12px 18px;font-size:13px}
+.mail-hdr div{display:flex;gap:10px;padding:3px 0} .mail-hdr span{width:62px;color:#64748b;flex:none}
+.mail-body{padding:0;background:#f1f5f9}
+.m-card{max-width:640px;margin:18px auto;background:#fff;border:1px solid #e2e8f0}
+.m-head{background:#0b1730;padding:20px 26px;display:flex;align-items:center;gap:14px}
+.m-logo{border:1.5px dashed rgba(255,255,255,.45);color:#cfe0ff;padding:10px 14px;border-radius:6px;font-weight:700;letter-spacing:.14em;font-size:12.5px}
+.m-head small{color:#8fa6cf;font-size:11px;letter-spacing:.06em}
+.m-in{padding:24px 26px;font-size:14px;line-height:1.6}
+.m-in p{margin-bottom:12px}
+.m-ok{margin:4px 0 18px;padding:10px 13px;border-left:4px solid #0aa77f;background:#ecfbf6;color:#08745a;font-weight:700}
+.m-in h5{font-size:15px;color:#0b1730;margin:6px 0 8px}
+.m-tbl{width:100%;border-collapse:collapse;border:1px solid #e2e8f0;margin-bottom:16px;font-size:13px}
+.m-tbl td,.m-tbl th{padding:8px 11px;border-bottom:1px solid #e2e8f0;text-align:left}
+.m-tbl th{font-size:11.5px;color:#64748b;font-weight:600;background:#f8fafc}
+.m-tbl td.k{color:#64748b;width:42%}
+.m-foot{padding:12px 26px;border-top:1px solid #e2e8f0;font-size:11px;color:#64748b}
+.toast{position:fixed;right:22px;bottom:22px;background:#fff;border:1px solid var(--line);border-left:4px solid var(--green);padding:12px 16px;border-radius:10px;font-size:13.5px;max-width:360px;box-shadow:0 12px 30px rgba(15,23,42,.15);animation:fadeUp .3s ease both;z-index:50}
+
+/* CLOSING */
+.close-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:34px;margin-top:26px;align-items:start}
+.chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:6px}
+.chip{padding:9px 14px;border:1px solid var(--line);border-radius:10px;background:#fff;font-weight:600;font-size:14px;box-shadow:var(--shadow)}
+.chip i{font-style:normal;color:var(--blue);margin-right:6px}
+.scale{padding:22px}
+.scale li{list-style:none;display:flex;gap:10px;margin-top:10px;font-size:14px;color:#334155}
+.scale li::before{content:"→";color:var(--blue);font-weight:800}
+footer{padding:30px 0;color:var(--dim);font-size:13px;text-align:center;background:#fff}
+
+@media (max-width:1050px){
+  .hero-grid,.split,.mail-wrap,.close-grid,.problem-grid{grid-template-columns:1fr}
+  .app-body{grid-template-columns:1fr} .steps{display:flex;overflow:auto;border-right:0;border-bottom:1px solid var(--line)} .steps .sl{display:none}
+  .step{min-width:170px} .kpis{grid-template-columns:repeat(3,1fr)} .improve{grid-template-columns:1fr 1fr}
+  .orch{grid-template-columns:1fr} h1{font-size:36px}
+}
+@media (max-width:640px){ .nodes,.improve{grid-template-columns:1fr} .kpis{grid-template-columns:repeat(2,1fr)} .wrap{padding:0 16px} }
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="eyebrow">Retail IT Automation · Project Showcase</div>
+      <h1>POS Enterprise<br><span>Control Center</span></h1>
+      <p class="lead" style="margin-top:16px">A centralized platform that automates the deployment of configuration XML files across multiple POS terminals — eliminating manual file handling, reducing human error and dramatically speeding up configuration rollouts across retail branches.</p>
+      <div class="quote">“Taking an existing POS deployment solution to the next level — transforming a basic single-file deployment workflow into a centralized enterprise platform with intelligent validation, multi-file processing, parallel deployment orchestration, and automated store communication.”</div>
+      <div class="hero-cta">
+        <a class="btn primary lg" href="#demo" id="heroStart">▶ Start Demo</a>
+        <a class="btn lg" href="#evolution">See what changed</a>
+      </div>
+    </div>
+    <div class="features">
+      <div class="card feat"><div class="ic">▤</div><div><b>Centralized POS management</b><span>One inventory of terminals, stores and status</span></div></div>
+      <div class="card feat"><div class="ic">⇪</div><div><b>Automated multi-file XML deployment</b><span>Upload many configuration files in one operation</span></div></div>
+      <div class="card feat"><div class="ic">⌁</div><div><b>Intelligent MAC address matching</b><span>Each file is mapped to the right terminal automatically</span></div></div>
+      <div class="card feat"><div class="ic">✓</div><div><b>Pre-deployment validation</b><span>Invalid or unmatched files never reach a POS</span></div></div>
+      <div class="card feat"><div class="ic">∥</div><div><b>Parallel orchestration with Ansible</b><span>Many terminals updated at the same time</span></div></div>
+      <div class="card feat"><div class="ic">◉</div><div><b>Live per-POS tracking & branded store emails</b><span>Real-time status, results and store notification</span></div></div>
+    </div>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+    <div class="eyebrow">The story</div>
+    <h2>Problem → Solution</h2>
+    <p class="lead">Updating VISA payment configuration on store POS terminals used to be a manual, terminal-by-terminal job.</p>
+    <div class="problem-grid">
+      <div class="card pr"><h3>The manual way</h3><ul>
+        <li>Connect to each POS individually and edit the XML by hand</li>
+        <li>Fix file ownership and permissions manually on every terminal</li>
+        <li>Easy to push the wrong file to the wrong terminal</li>
+        <li>No central record of what was deployed, where, and by whom</li>
+        <li>Stores informed ad hoc — or not at all</li></ul></div>
+      <div class="card so"><h3>With POS Enterprise Control Center</h3><ul>
+        <li>Upload all XML files at once through a web interface</li>
+        <li>Files matched to terminals automatically by MAC address</li>
+        <li>Everything validated before a single file is pushed</li>
+        <li>Ansible updates many terminals in parallel, with live status</li>
+        <li>Full history, audit trail and a ready-to-send store email</li></ul></div>
+    </div>
+    <div class="story">
+      <div class="st"><small>01</small><b>Problem</b><p>Manual, error-prone POS configuration</p></div>
+      <div class="st"><small>02</small><b>Solution</b><p>One centralized web platform</p></div>
+      <div class="st"><small>03</small><b>Validation</b><p>XML checked before deployment</p></div>
+      <div class="st"><small>04</small><b>Intelligent matching</b><p>MAC address → POS terminal</p></div>
+      <div class="st"><small>05</small><b>Parallel automation</b><p>Ansible, many hosts at once</p></div>
+      <div class="st"><small>06</small><b>Verification</b><p>Per-POS result & report</p></div>
+      <div class="st"><small>07</small><b>Store communication</b><p>Branded email per store</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="evolution">
+  <div class="wrap">
+    <div class="eyebrow">Project evolution</div>
+    <h2>From the previous version to an Enterprise Control Center</h2>
+    <p class="lead">This is a major evolution of an existing tool — not a new application. The previous version already handled basic POS XML deployment; the new release removes its limitations.</p>
+    <table class="evo">
+      <thead><tr><th>Capability</th><th>Previous version</th><th class="new">New Enterprise Control Center</th></tr></thead>
+      <tbody>
+        <tr><td>User interface</td><td class="old">Basic interface</td><td class="nw">Modern, redesigned enterprise UI</td></tr>
+        <tr><td>File upload</td><td class="old">One XML file at a time</td><td class="nw">Multiple XML files simultaneously</td></tr>
+        <tr><td>POS matching</td><td class="old">Limited workflow</td><td class="nw">Automated MAC address-based matching</td></tr>
+        <tr><td>Validation</td><td class="old">Basic processing</td><td class="nw">Comprehensive pre-deployment validation</td></tr>
+        <tr><td>Deployment</td><td class="old">Single-file deployment</td><td class="nw">Multiple files to multiple POS terminals in parallel</td></tr>
+        <tr><td>Deployment tracking</td><td class="old">Basic status</td><td class="nw">Detailed per-POS live progress and execution status</td></tr>
+        <tr><td>Email notifications</td><td class="old">Not available</td><td class="nw">Automated branded store email notifications</td></tr>
+        <tr><td>Deployment reporting</td><td class="old">Limited visibility</td><td class="nw">Centralized deployment summary and detailed results</td></tr>
+      </tbody>
+    </table>
+    <div class="improve">
+      <div class="card"><div class="n">01</div><b>Enhanced user experience</b><p>A redesigned, professional and intuitive workflow.</p></div>
+      <div class="card"><div class="n">02</div><b>Multi-file processing</b><p>Upload and process many XML files in a single operation.</p></div>
+      <div class="card"><div class="n">03</div><b>Intelligent POS mapping</b><p>Automatic matching of files to registered terminals via MAC address.</p></div>
+      <div class="card"><div class="n">04</div><b>Advanced validation</b><p>All files and deployment targets checked before execution.</p></div>
+      <div class="card"><div class="n">05</div><b>Parallel deployment</b><p>Many files to many terminals at the same time.</p></div>
+      <div class="card"><div class="n">06</div><b>Automated communication</b><p>Branded store emails confirming the VISA update and requesting a test transaction.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="demo" id="demo">
+  <div class="wrap">
+    <div class="demo-head">
+      <div>
+        <div class="eyebrow">Interactive demo</div>
+        <h2>The complete deployment lifecycle</h2>
+        <p class="lead">Upload → validate & match → preview → parallel deployment → report → store email.</p>
+      </div>
+      <div class="row-flex" style="align-items:center">
+        <span class="sim">Simulation · mock data · no real devices</span>
+        <button class="btn" id="btnReset">↺ Reset</button>
+        <button class="btn primary" id="btnAuto">▶ Auto-play demo</button>
+      </div>
+    </div>
+    <div class="app">
+      <div class="app-bar">
+        <div class="app-brand"><div class="logo-ph">A</div><div><b>POS Enterprise Control Center</b><small>Retail IT · Configuration Management</small></div></div>
+        <span class="sim">Demo environment</span>
+      </div>
+      <div class="app-body">
+        <aside class="steps" id="steps"><div class="sl">Workflow</div></aside>
+        <main class="stage" id="stage"></main>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="eyebrow">Closing</div>
+    <h2>From Manual POS Configuration to Centralized Enterprise Automation</h2>
+    <p class="lead">What started as a basic single-file deployment tool is now a centralized platform that validates, matches, deploys in parallel, verifies and communicates — reducing a repetitive manual task to a few clicks.</p>
+    <div class="close-grid">
+      <div>
+        <h3 style="margin-bottom:12px">Engineering concepts behind the solution</h3>
+        <div class="chips">
+          <div class="chip"><i>❯</i>Linux Administration</div>
+          <div class="chip"><i>❯</i>Ansible Automation</div>
+          <div class="chip"><i>❯</i>Python / Backend Orchestration</div>
+          <div class="chip"><i>❯</i>XML Processing</div>
+          <div class="chip"><i>❯</i>MAC Address Mapping</div>
+          <div class="chip"><i>❯</i>Parallel Execution</div>
+          <div class="chip"><i>❯</i>Enterprise IT Operations</div>
+        </div>
+      </div>
+      <div class="card scale">
+        <h3>How it reduces manual IT work</h3>
+        <ul>
+          <li>No more connecting to terminals one by one</li>
+          <li>Wrong-file / wrong-terminal mistakes caught before deployment</li>
+          <li>Parallel execution keeps rollout time flat as terminal count grows</li>
+          <li>Every deployment is recorded with per-POS results</li>
+          <li>Store notification prepared automatically — reviewed and sent by IT</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>POS Enterprise Control Center · Project showcase · All names, MAC and IP addresses in this demo are fictional (RFC 5737 documentation ranges). No production systems are contacted.</footer>
+
+<script>
+(() => {
+'use strict';
+const STORES = {
+  S1:{name:'Demo Store – Riverside Mall', code:'DS-101', brand:'Brand A', email:'riverside.store@example.com'},
+  S2:{name:'Demo Store – City Center',   code:'DS-102', brand:'Brand B', email:'citycenter.store@example.com'},
+};
+const INVENTORY = [
+  {host:'DS101-POS01', ip:'192.0.2.11',   mac:'AA:BB:CC:11:22:01', store:'S1'},
+  {host:'DS101-POS02', ip:'192.0.2.12',   mac:'AA:BB:CC:11:22:02', store:'S1'},
+  {host:'DS102-POS01', ip:'198.51.100.21',mac:'AA:BB:CC:11:22:03', store:'S2'},
+  {host:'DS102-POS02', ip:'198.51.100.22',mac:'AA:BB:CC:11:22:04', store:'S2'},
+  {host:'DS102-POS03', ip:'198.51.100.23',mac:'AA:BB:CC:11:22:05', store:'S2'},
+];
+const xmlFor = (mac) => `<?xml version="1.0" encoding="UTF-8"?>\n<properties>\n  <entry key="visa.terminal.mac">${mac}</entry>\n  <entry key="visa.gateway.host">payments.example.com</entry>\n  <entry key="visa.gateway.port">443</entry>\n</properties>`;
+const SAMPLE = [
+  {name:'MarshalPOS-AABBCC112201.XML', text:xmlFor('AA:BB:CC:11:22:01')},
+  {name:'MarshalPOS-AABBCC112202.XML', text:xmlFor('AA:BB:CC:11:22:02')},
+  {name:'MarshalPOS-AABBCC112203.XML', text:xmlFor('AA:BB:CC:11:22:03')},
+  {name:'MarshalPOS-AABBCC112204.XML', text:xmlFor('AA:BB:CC:11:22:04')},
+  {name:'MarshalPOS-AABBCC1122FF.XML', text:xmlFor('AA:BB:CC:11:22:FF')},
+  {name:'MarshalPOS-AABBCC112205.XML', text:'<?xml version="1.0"?>\n<properties>\n  <entry key="visa.terminal.mac">AA:BB:CC:11:22:05\n</properties>'},
+];
+const FAIL_HOST = 'DS102-POS02';
+
+const STAGES = [
+  ['Multi-file upload','Queue XML files'],
+  ['Validate & match','MAC → POS mapping'],
+  ['Deployment preview','Review targets'],
+  ['Parallel deployment','Ansible orchestration'],
+  ['Deployment results','Per-POS report'],
+  ['Store email','Branded notification'],
+];
+let S;
+function fresh(){ return {stage:0, maxStage:0, files:[], validated:false, validating:false, targets:[], deploy:null, report:null, mailStore:null, auto:false}; }
+S = fresh();
+const timers = new Set();
+const later = (fn, ms) => { const t = setTimeout(() => { timers.delete(t); fn(); }, ms); timers.add(t); return t; };
+const clearTimers = () => { timers.forEach(clearTimeout); timers.clear(); };
+const $ = (s, r=document) => r.querySelector(s);
+const esc = (v) => String(v).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const now = () => new Date().toLocaleTimeString([], {hour12:false});
+const fmtSize = (n) => n < 1024 ? n + ' B' : (n/1024).toFixed(1) + ' KB';
+function toast(msg, color){ const t = document.createElement('div'); t.className='toast'; if(color) t.style.borderLeftColor=color; t.innerHTML=msg; document.body.appendChild(t); setTimeout(()=>t.remove(), 3600); }
+
+function renderSteps(){
+  const el = $('#steps');
+  el.innerHTML = '<div class="sl">Workflow</div>' + STAGES.map(([t,d],i) => {
+    const done = i < S.maxStage && i !== S.stage;
+    return `<div class="step ${i===S.stage?'active':''} ${done?'done':''} ${i>S.maxStage?'locked':''}" data-i="${i}">
+      <div class="dot">${done?'✓':i+1}</div><div><b>${t}</b><span>${d}</span></div></div>`;
+  }).join('');
+  el.querySelectorAll('.step').forEach(s => s.onclick = () => { const i = +s.dataset.i; if (i <= S.maxStage) go(i); });
+}
+function go(i){ S.stage = i; S.maxStage = Math.max(S.maxStage, i); render(); }
+function render(){ renderSteps(); [stUpload, stValidate, stPreview, stDeploy, stReport, stEmail][S.stage](); }
+function head(title, sub){ return `<div class="stage-h fade"><div><div class="eyebrow" style="margin-bottom:4px">Stage ${S.stage+1} of 6</div><h3>${title}</h3><p>${sub}</p></div></div>`; }
+function nav(nextLabel, nextEnabled){
+  return `<div class="nav">${S.stage>0?'<button class="btn" id="bBack">← Back</button>':''}
+    ${nextLabel?`<button class="btn primary" id="bNext" ${nextEnabled?'':'disabled'}>${nextLabel}</button>`:''}</div>`;
+}
+function wireNav(nextFn){ const b=$('#bBack'); if(b) b.onclick=()=>go(S.stage-1); const n=$('#bNext'); if(n) n.onclick=nextFn; }
+
+function macFromName(name){
+  const m = name.replace(/\.[^.]+$/,'').match(/(?<![0-9A-F])((?:[0-9A-F]{2}[:-]?){5}[0-9A-F]{2})(?![0-9A-F])/i);
+  if(!m) return null;
+  const h = m[1].replace(/[^0-9A-F]/gi,'').toUpperCase();
+  return h.match(/.{2}/g).join(':');
+}
+function parseXml(text){
+  if (/<!ENTITY/i.test(text)) return {ok:false, err:'Entity declarations are not allowed'};
+  const doc = new DOMParser().parseFromString(text, 'application/xml');
+  const pe = doc.getElementsByTagName('parsererror')[0];
+  if (pe) return {ok:false, err:'Malformed XML: ' + (pe.textContent.split('\n').find(l=>l.trim())||'parse error').trim().slice(0,70)};
+  return {ok:true, root:doc.documentElement.nodeName};
+}
+
+function addFiles(list){
+  let delay = 0;
+  list.forEach(f => {
+    if (S.files.some(x => x.name.toLowerCase() === f.name.toLowerCase())) { toast(`Skipped duplicate file <b>${esc(f.name)}</b>`, '#f59e0b'); return; }
+    if (!/\.xml$/i.test(f.name)) { toast(`Rejected <b>${esc(f.name)}</b> — only .xml files are accepted`, '#ef4444'); return; }
+    const item = {name:f.name, text:f.text, size:new Blob([f.text]).size, progress:0, state:'queued'};
+    S.files.push(item); S.validated = false; S.maxStage = 0;
+    later(() => tickUpload(item), delay); delay += 260;
+  });
+  render();
+}
+function tickUpload(item){
+  item.state = 'uploading';
+  const step = () => {
+    item.progress = Math.min(100, item.progress + 18 + Math.random()*22);
+    if (item.progress >= 100) { item.progress = 100; item.state = 'uploaded'; }
+    if (S.stage === 0) updUploadRow(item);
+    if (item.state !== 'uploaded') later(step, 140);
+    else if (S.stage === 0) render();
+  };
+  step();
+}
+function updUploadRow(item){
+  const r = document.querySelector(`[data-up="${CSS.escape(item.name)}"]`);
+  if (!r) return;
+  r.querySelector('.bar>i').style.width = item.progress + '%';
+  r.querySelector('.stt').innerHTML = item.state === 'uploaded' ? '<span class="badge b-ok">Uploaded</span>' : '<span class="badge b-run">Uploading…</span>';
+}
+function stUpload(){
+  const all = S.files.length && S.files.every(f => f.state === 'uploaded');
+  $('#stage').innerHTML = head('Multi-file XML upload', 'Drop several configuration files at once — one per POS terminal. Files are queued and uploaded together, not one at a time.') + `
+    <div class="drop fade" id="drop">
+      <div class="ico">⇪</div>
+      <div class="big">Drag & drop XML files here</div>
+      <div class="muted" style="font-size:13.5px">or click to browse · multiple selection · .xml only</div>
+      <div style="margin-top:14px"><button class="btn primary" id="bSample">Load 6 sample XML files</button></div>
+      <input type="file" id="fileIn" accept=".xml,text/xml,application/xml" multiple hidden>
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin:20px 0 10px">
+      <h3 style="font-size:15px">File queue <span class="dim" style="font-weight:500">(${S.files.length})</span></h3>
+      ${S.files.length?'<button class="btn" id="bClear" style="padding:6px 12px;font-size:13px">Clear queue</button>':''}
+    </div>
+    <div class="tbl">${S.files.length ? `<table class="t"><thead><tr><th>File</th><th>Size</th><th style="width:34%">Upload</th><th>Status</th></tr></thead><tbody>
+      ${S.files.map(f => `<tr class="new" data-up="${esc(f.name)}"><td><div class="fname"><div class="fico">XML</div>${esc(f.name)}</div></td>
+        <td class="mono dim">${fmtSize(f.size)}</td>
+        <td><div class="bar ${f.state==='uploaded'?'ok':''}"><i style="width:${f.progress}%"></i></div></td>
+        <td class="stt">${f.state==='uploaded'?'<span class="badge b-ok">Uploaded</span>':f.state==='uploading'?'<span class="badge b-run">Uploading…</span>':'<span class="badge b-pend">Queued</span>'}</td></tr>`).join('')}
+      </tbody></table>` : '<div style="padding:26px;text-align:center" class="dim">No files yet — drop XML files above or load the sample set.</div>'}</div>
+    ${nav('Validate & match →', all)}`;
+  const drop = $('#drop'), inp = $('#fileIn');
+  drop.onclick = (e) => { if (e.target.id !== 'bSample') inp.click(); };
+  inp.onchange = () => readFiles(inp.files);
+  ['dragenter','dragover'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.add('over'); }));
+  ['dragleave','drop'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.remove('over'); }));
+  drop.addEventListener('drop', e => readFiles(e.dataTransfer.files));
+  $('#bSample').onclick = (e) => { e.stopPropagation(); addFiles(SAMPLE.map(s => ({...s}))); };
+  const c = $('#bClear'); if (c) c.onclick = () => { S.files = []; S.validated = false; S.maxStage = 0; render(); };
+  wireNav(() => go(1));
+}
+function readFiles(fl){
+  const arr = Array.from(fl || []);
+  Promise.all(arr.map(f => f.text().then(text => ({name:f.name, text})))).then(addFiles);
+}
+
+function runValidation(){
+  S.validating = true; S.validated = false;
+  S.files.forEach(f => { f.v = {step:0, mac:null, pos:null, ok:null, msg:''}; });
+  render();
+  const seen = {};
+  S.files.forEach((f, i) => {
+    const base = i * 380;
+    later(() => { f.v.step = 1; const p = parseXml(f.text); f.v.parse = p; if (!p.ok) { f.v.ok=false; f.v.msg=p.err; f.v.step=4; } upd(); }, base + 200);
+    later(() => { if (f.v.ok===false) return; f.v.step = 2; f.v.mac = macFromName(f.name); if (!f.v.mac){ f.v.ok=false; f.v.msg='No MAC address found in file name'; f.v.step=4; } upd(); }, base + 600);
+    later(() => { if (f.v.ok===false) return; f.v.step = 3; f.v.pos = INVENTORY.find(p => p.mac === f.v.mac) || null; upd(true); }, base + 1000);
+    later(() => {
+      if (f.v.ok===false) { upd(); return; }
+      f.v.step = 4;
+      if (!f.v.pos) { f.v.ok=false; f.v.msg='MAC address not registered in POS inventory'; }
+      else if (seen[f.v.pos.host]) { f.v.ok=false; f.v.msg=`Duplicate target — ${f.v.pos.host} already receives ${seen[f.v.pos.host]}`; }
+      else { f.v.ok=true; seen[f.v.pos.host]=f.name; f.v.msg='Ready for deployment'; }
+      upd();
+    }, base + 1400);
+  });
+  later(() => {
+    S.validating = false; S.validated = true;
+    S.targets = S.files.filter(f => f.v.ok).map(f => ({file:f.name, size:f.size, ...f.v.pos, selected:true}));
+    if (S.stage === 1) render();
+    const bad = S.files.filter(f => !f.v.ok).length;
+    toast(`Validation complete — <b>${S.targets.length}</b> ready, <b style="color:var(--red)">${bad}</b> blocked`, bad ? '#f59e0b' : '#10b981');
+  }, (S.files.length - 1) * 380 + 1700);
+  function upd(hit){ if (S.stage === 1) { renderValRows(); if (hit) flashInv(); } }
+}
+function pipeHtml(f){
+  const st = f.v ? f.v.step : 0, fail = f.v && f.v.ok === false;
+  const lab = ['Parse XML','Extract MAC','Inventory lookup','Result'];
+  return '<div class="pipe">' + lab.map((l,i) => {
+    let c = st > i+1 || (st===4 && i===3) ? (fail && (i===3 || st-1===i) ? 'bad':'ok') : (st === i+1 ? 'on' : '');
+    if (fail && i < 3 && st===4) c = i < failIndex(f) ? 'ok' : (i === failIndex(f) ? 'bad' : '');
+    if (fail && i===3) c='bad';
+    return `<i class="${c}">${l}</i>`; }).join('<span>›</span>') + '</div>';
+}
+function failIndex(f){ if (f.v.parse && !f.v.parse.ok) return 0; if (!f.v.mac) return 1; return 2; }
+function renderValRows(){
+  const tb = $('#valBody'); if (!tb) return;
+  tb.innerHTML = S.files.map(f => {
+    const v = f.v || {};
+    const res = v.ok === true ? '<span class="badge b-ok">✓ Valid</span>' : v.ok === false ? '<span class="badge b-bad">✕ Failed</span>' : v.step ? '<span class="badge b-run">Checking…</span>' : '<span class="badge b-pend">Pending</span>';
+    const mac = v.mac ? `<span class="mono">${v.mac}</span>` : (v.step >= 2 || v.ok===false ? '<span class="dim">Unknown</span>' : '<span class="dim">—</span>');
+    const pos = v.pos ? `<b>${v.pos.host}</b><div class="dim mono" style="font-size:11.5px">${v.pos.ip}</div>` : (v.step >= 3 || v.ok===false ? '<span class="dim">Not found</span>' : '<span class="dim">—</span>');
+    return `<tr><td><div class="fname"><div class="fico">XML</div><span style="font-size:13px">${esc(f.name)}</span></div>${f.v && f.v.step? pipeHtml(f):''}</td>
+      <td>${mac}</td><td>${pos}</td><td>${res}${v.msg?`<div class="msg ${v.ok?'dim':''}" style="${v.ok===false?'color:#dc2626':''}">${esc(v.msg)}</div>`:''}</td></tr>`;
+  }).join('');
+}
+function flashInv(){
+  const hits = new Set(S.files.filter(f => f.v && f.v.pos).map(f => f.v.pos.mac));
+  document.querySelectorAll('.inv-row').forEach(r => r.classList.toggle('hit', hits.has(r.dataset.mac)));
+}
+function stValidate(){
+  const ok = S.files.filter(f => f.v && f.v.ok).length, bad = S.files.filter(f => f.v && f.v.ok === false).length;
+  $('#stage').innerHTML = head('Intelligent validation & MAC matching', 'Each XML is parsed, the POS MAC address is extracted from the MarshalPOS file name, and matched against the registered POS inventory. Anything that fails is blocked from deployment.') + `
+    <div class="split fade">
+      <div>
+        <div class="row-flex" style="margin-bottom:12px;align-items:center">
+          <button class="btn primary" id="bRun" ${S.validating?'disabled':''}>${S.validated?'↻ Re-run validation':'▶ Run validation'}</button>
+          ${S.validated?`<span class="badge b-ok">${ok} valid</span><span class="badge b-bad">${bad} failed</span>`:''}
+        </div>
+        <div class="tbl"><table class="t"><thead><tr><th>XML file</th><th>Extracted MAC</th><th>Matched POS</th><th>Validation</th></tr></thead><tbody id="valBody"></tbody></table></div>
+      </div>
+      <div>
+        <div class="card inv"><h4><span>Registered POS inventory</span><span class="dim mono" style="font-size:11.5px">${INVENTORY.length} terminals</span></h4>
+          <div class="inv-row dim" style="font-family:inherit;font-weight:700;font-size:11px;letter-spacing:.06em">HOSTNAME<span>MAC ADDRESS</span><span>STORE</span></div>
+          ${INVENTORY.map(p => `<div class="inv-row" data-mac="${p.mac}"><span>${p.host}</span><span>${p.mac}</span><span style="font-family:Inter,sans-serif">${STORES[p.store].code}</span></div>`).join('')}
+        </div>
+        <div class="card inv" style="margin-top:12px"><h4>Checks performed</h4>
+          <div class="checks" style="margin-top:0">
+            <div>Allowed file type and safe file name</div>
+            <div>Well-formed XML; entity / DTD attacks rejected</div>
+            <div>MAC address extracted from the file name</div>
+            <div>MAC registered in the POS inventory</div>
+            <div>One file per POS — duplicate targets blocked</div>
+          </div></div>
+      </div>
+    </div>
+    ${nav('Review deployment →', S.validated && ok > 0)}`;
+  renderValRows(); flashInv();
+  $('#bRun').onclick = runValidation;
+  wireNav(() => go(2));
+  if (!S.validated && !S.validating && S.files.length) later(runValidation, 450);
+}
+
+function stPreview(){
+  const total = S.files.length, valid = S.targets.length, failed = total - valid, sel = S.targets.filter(t => t.selected);
+  const stores = new Set(sel.map(t => t.store));
+  $('#stage').innerHTML = head('Deployment preview', 'Review exactly what will be deployed, and where, before anything is executed.') + `
+    <div class="kpis fade">
+      <div class="card kpi"><small>Uploaded files</small><b>${total}</b></div>
+      <div class="card kpi"><small>Validated</small><b style="color:var(--green)">${valid}</b></div>
+      <div class="card kpi"><small>Failed validation</small><b style="color:var(--red)">${failed}</b></div>
+      <div class="card kpi"><small>Matched POS</small><b>${valid}</b></div>
+      <div class="card kpi"><small>Deployment targets</small><b style="color:var(--blue)">${sel.length}</b></div>
+      <div class="card kpi"><small>Stores affected</small><b>${stores.size}</b></div>
+    </div>
+    <div class="card strategy fade">
+      <div><div class="k">Execution strategy</div><div class="v">Parallel — single Ansible run</div></div>
+      <div><div class="k">Concurrency</div><div class="v">${sel.length} hosts at once (forks)</div></div>
+      <div><div class="k">On each POS</div><div class="v">Backup → push XML → epos:epos 0666 → verify</div></div>
+      <div><div class="k">Credentials</div><div class="v">Server-side vault only</div></div>
+    </div>
+    <div class="tbl fade"><table class="t"><thead><tr><th style="width:40px"></th><th>Target POS</th><th>IP address</th><th>Store</th><th>Configuration file</th></tr></thead><tbody>
+      ${S.targets.map((t,i) => `<tr><td><span class="cb" data-i="${i}" style="cursor:pointer;display:inline-block;width:18px;height:18px;border-radius:5px;border:2px solid ${t.selected?'var(--blue)':'var(--line2)'};background:${t.selected?'var(--blue)':'#fff'};color:#fff;font-size:12px;line-height:14px;text-align:center">${t.selected?'✓':''}</span></td>
+        <td><b>${t.host}</b><div class="dim mono" style="font-size:11.5px">${t.mac}</div></td><td class="mono">${t.ip}</td>
+        <td>${STORES[t.store].name}</td><td class="mono" style="color:var(--cyan)">${esc(t.file)}</td></tr>`).join('')}
+    </tbody></table></div>
+    ${S.files.filter(f=>!f.v.ok).length?`<div class="card" style="padding:12px 16px;margin-top:12px;border-color:#fca5a5;background:#fff7f7"><b style="color:var(--red);font-size:13.5px">Excluded from deployment</b>
+      ${S.files.filter(f=>!f.v.ok).map(f=>`<div class="muted" style="font-size:13px;margin-top:4px"><span class="mono">${esc(f.name)}</span> — ${esc(f.v.msg)}</div>`).join('')}</div>`:''}
+    ${nav(`▶ Start parallel deployment (${sel.length})`, sel.length > 0)}`;
+  document.querySelectorAll('.cb').forEach(c => c.onclick = () => { const t = S.targets[+c.dataset.i]; t.selected = !t.selected; render(); });
+  wireNav(() => { startDeploy(); go(3); });
+}
+
+const PHASES = ['Connecting','Backup','Transferring','Applying','Verifying','Completed'];
+function startDeploy(){
+  clearTimers();
+  const sel = S.targets.filter(t => t.selected);
+  const D = S.deploy = {jobId: 1042, start: Date.now(), end: null, nodes: sel.map(t => ({...t, phase:-1, pct:0, status:'pending', started:null, ended:null, err:null})), log: []};
+  S.report = null;
+  const log = (cls, host, msg) => { D.log.push({t: now(), cls, host, msg}); if (S.stage === 3) renderLog(); };
+  log('info', null, `Job #${D.jobId} created — ${D.nodes.length} target(s)`);
+  later(() => log('info', null, `ansible-playbook site.yml --limit ${D.nodes.map(n=>n.host).join(',')} (forks=${D.nodes.length})`), 350);
+  D.nodes.forEach((n, idx) => {
+    const fail = n.host === FAIL_HOST;
+    const durs = PHASES.slice(0,5).map(() => 550 + Math.random()*900);
+    let t = 650 + idx*90;
+    later(() => { n.status='running'; n.started=Date.now(); n.phase=0; log('info', n.host, `SSH connect ${n.ip}:22`); upd(n); }, t);
+    if (fail) {
+      later(() => { n.status='failed'; n.ended=Date.now(); n.err='UNREACHABLE! ssh: connect to host '+n.ip+' port 22: Connection timed out'; log('bad', n.host, 'UNREACHABLE — connection timed out'); upd(n); check(); }, t + 3200);
+      return;
+    }
+    let acc = t;
+    durs.forEach((d, p) => {
+      acc += d;
+      later(() => {
+        if (p < 4) { n.phase = p+1; const m = ['Backup MarshalPOS.XML → .bak-job1042','Transferring '+n.file,'Setting owner epos:epos, mode 0666','Verifying checksum'][p]; log('info', n.host, m); }
+        else { n.phase = 5; n.status='success'; n.ended=Date.now(); log('ok', n.host, 'SUCCESS — configuration deployed'); check(); }
+        upd(n);
+      }, acc);
+    });
+  });
+  function upd(n){ n.pct = n.status==='failed' ? Math.max(n.pct, 12) : Math.round((n.phase+ (n.status==='success'?1:0)) / 6 * 100); if (S.stage === 3) renderNode(n); renderOverall(); }
+  function check(){
+    if (D.nodes.every(n => n.status==='success' || n.status==='failed')) {
+      D.end = Date.now();
+      const ok = D.nodes.filter(n=>n.status==='success').length;
+      log(ok===D.nodes.length?'ok':'bad', null, `Job #${D.jobId} finished — ${ok}/${D.nodes.length} successful in ${((D.end-D.start)/1000).toFixed(1)}s`);
+      S.report = true; S.maxStage = Math.max(S.maxStage, 4);
+      if (S.stage === 3) { render(); }
+      toast(`Deployment #${D.jobId} completed — <b>${ok}</b> success, <b style="color:var(--red)">${D.nodes.length-ok}</b> failed`, ok===D.nodes.length?'#10b981':'#f59e0b');
+      if (S.auto) later(() => go(4), 3500);
+    }
+  }
+}
+function nodeHtml(n){
+  const st = n.status;
+  const badge = st==='success'?'<span class="badge b-ok">✓ Success</span>':st==='failed'?'<span class="badge b-bad">✕ Failed</span>':st==='running'?'<span class="badge b-run">'+PHASES[Math.max(0,n.phase)]+'…</span>':'<span class="badge b-pend">Pending</span>';
+  const pipe = '<div class="pipe">' + PHASES.map((p,i) => {
+    let c=''; if (st==='failed') c = i===0 ? 'bad' : ''; else if (i < n.phase || (st==='success')) c='ok'; else if (i===n.phase) c='on';
+    return `<i class="${c}">${p}</i>`; }).join('') + '</div>';
+  const el = n.started ? (((n.ended||Date.now()) - n.started)/1000).toFixed(1)+'s' : '—';
+  return `<div class="packet"></div><div class="node-top"><div class="term"><div class="scr"></div><div><b>${n.host}</b><small>${n.ip}</small></div></div>${badge}</div>
+    <div class="file">⇢ ${esc(n.file)}</div>
+    <div class="bar ${st==='success'?'ok':st==='failed'?'bad':''}"><i style="width:${n.pct}%"></i></div>
+    ${pipe}
+    <div class="meta"><span>${STORES[n.store].code}</span><span>${n.started?new Date(n.started).toLocaleTimeString([], {hour12:false}):'--:--:--'} · ${el}</span></div>`;
+}
+function renderNode(n){ const el = document.querySelector(`[data-node="${n.host}"]`); if (!el) return; el.className = 'card node ' + (n.status==='running'?'run':n.status==='success'?'ok':n.status==='failed'?'bad':''); el.innerHTML = nodeHtml(n); }
+function renderLog(){ const l = $('#log'); if (!l) return; l.innerHTML = S.deploy.log.map(e => `<div><span class="ts">${e.t}</span>  ${e.host?`<span class="host">[${e.host}]</span> `:''}<span class="${e.cls}">${esc(e.msg)}</span></div>`).join(''); l.scrollTop = l.scrollHeight; }
+function renderOverall(){
+  const D = S.deploy; if (!D || S.stage !== 3) return;
+  const done = D.nodes.filter(n => n.status==='success'||n.status==='failed').length, run = D.nodes.filter(n=>n.status==='running').length;
+  const pct = Math.round(D.nodes.reduce((a,n)=>a+n.pct,0)/D.nodes.length);
+  const o = $('#ov'); if (o) o.innerHTML = `<b style="font-size:13.5px">${done}/${D.nodes.length} completed</b> <span class="dim" style="font-size:12.5px">· ${run} running in parallel · ${((( D.end||Date.now())-D.start)/1000).toFixed(1)}s</span>`;
+  const b = $('#ovbar'); if (b) b.style.width = pct + '%';
+  const c = $('#ctrl'); if (c) c.classList.toggle('live', !D.end);
+  const cmp = $('#cmp'); if (cmp && D.end) {
+    const par = (D.end - D.start)/1000, seq = D.nodes.reduce((a,n)=>a+((n.ended-n.started)/1000),0);
+    cmp.innerHTML = `<b style="font-size:13.5px">Parallel vs sequential</b><span class="dim" style="font-size:12px"> — same ${D.nodes.length} hosts in this run</span>
+      <div class="cmp-row"><span class="muted">One after another</span><div class="cmp-bar"><i style="left:0;width:100%;background:#94a3b8"></i></div><span class="mono">${seq.toFixed(1)}s</span></div>
+      <div class="cmp-row"><span style="color:var(--blue);font-weight:600">Parallel (this run)</span><div class="cmp-bar"><i style="left:0;width:${Math.max(6,par/seq*100)}%;background:var(--blue)"></i></div><span class="mono" style="color:var(--blue)">${par.toFixed(1)}s</span></div>`;
+  }
+}
+function stDeploy(){
+  const D = S.deploy;
+  if (!D) { $('#stage').innerHTML = head('Parallel deployment','Start a deployment from the preview stage.') + nav(null); wireNav(); return; }
+  $('#stage').innerHTML = head('Parallel deployment execution', 'All validated files are pushed to their terminals at the same time by a single Ansible run — not one terminal after another.') + `
+    <div class="orch fade">
+      <div class="card ctrl ${D.end?'':'live'}" id="ctrl"><div class="ring">∥</div><b>Ansible worker</b><small>Job #${D.jobId} · forks=${D.nodes.length}</small></div>
+      <div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><div id="ov"></div><span class="sim" style="font-size:10.5px">Simulated</span></div>
+        <div class="bar" style="height:8px;margin-bottom:14px"><i id="ovbar"></i></div>
+        <div class="nodes">${D.nodes.map(n => `<div class="card node" data-node="${n.host}"></div>`).join('')}</div>
+      </div>
+    </div>
+    <div class="split">
+      <div><h3 style="font-size:14px;margin-bottom:8px">Deployment log</h3><div class="log" id="log"></div></div>
+      <div><div class="card cmp" id="cmp" style="margin-top:28px"><b style="font-size:13.5px">Parallel vs sequential</b><div class="dim" style="font-size:12.5px;margin-top:6px">Calculated when the run finishes…</div></div></div>
+    </div>
+    ${nav('View deployment report →', !!S.report)}`;
+  D.nodes.forEach(renderNode); renderLog(); renderOverall();
+  wireNav(() => go(4));
+  const tick = () => { if (S.stage === 3 && S.deploy === D && !D.end) { D.nodes.filter(n=>n.status==='running').forEach(renderNode); renderOverall(); later(tick, 300); } };
+  tick();
+}
+
+function stReport(){
+  const D = S.deploy;
+  const ok = D.nodes.filter(n=>n.status==='success'), bad = D.nodes.filter(n=>n.status==='failed');
+  const dur = ((D.end - D.start)/1000).toFixed(1);
+  $('#stage').innerHTML = head(`Deployment report — Job #${D.jobId}`, 'Centralized summary with a per-POS result. Failed terminals keep their full error and can be retried individually.') + `
+    <div class="kpis fade" style="grid-template-columns:repeat(5,1fr)">
+      <div class="card kpi"><small>Targets</small><b>${D.nodes.length}</b></div>
+      <div class="card kpi"><small>Successful</small><b style="color:var(--green)">${ok.length}</b></div>
+      <div class="card kpi"><small>Failed</small><b style="color:var(--red)">${bad.length}</b></div>
+      <div class="card kpi"><small>Duration</small><b>${dur}s</b></div>
+      <div class="card kpi"><small>Job status</small><b style="font-size:18px;margin-top:8px"><span class="badge ${bad.length?(ok.length?'b-warn':'b-bad'):'b-ok'}" style="font-size:13px">${bad.length?(ok.length?'PARTIAL':'FAILED'):'SUCCESS'}</span></b></div>
+    </div>
+    <div class="tbl fade"><table class="t"><thead><tr><th>POS</th><th>IP address</th><th>Store</th><th>Configuration file</th><th>Status</th><th>Execution</th></tr></thead><tbody>
+      ${D.nodes.map(n => `<tr><td><b>${n.host}</b></td><td class="mono">${n.ip}</td><td>${STORES[n.store].name}</td><td class="mono" style="color:var(--cyan)">${esc(n.file)}</td>
+        <td>${n.status==='success'?'<span class="badge b-ok">✓ Success</span>':'<span class="badge b-bad">✕ Failed</span>'}${n.err?`<div class="err">${esc(n.err)}</div>`:''}</td>
+        <td class="mono dim">${((n.ended-n.started)/1000).toFixed(1)}s ${n.status==='failed'?'<div><button class="btn" style="padding:4px 10px;font-size:12px;margin-top:4px" onclick="this.closest(\'td\').innerHTML=\'<span class=&quot;badge b-run&quot;>Retry queued (demo)</span>\'">↻ Retry</button></div>':''}</td></tr>`).join('')}
+    </tbody></table></div>
+    <div class="card" style="padding:14px 18px;margin-top:14px;display:flex;gap:12px;align-items:center;border-color:#6ee7b7;background:#f0fdf8">
+      <span style="font-size:20px;color:var(--green)">✉</span>
+      <div><b style="font-size:14px">Store notifications are ready</b><div class="muted" style="font-size:13px">Emails are prepared only for successfully updated POS — failed terminals are never included.</div></div>
+    </div>
+    ${nav('Prepare store emails →', ok.length > 0)}`;
+  wireNav(() => go(5));
+  if (S.auto) later(() => go(5), 6000);
+}
+
+function stEmail(){
+  const D = S.deploy;
+  const ok = D.nodes.filter(n => n.status==='success');
+  const groups = {}; ok.forEach(n => (groups[n.store] = groups[n.store] || []).push(n));
+  const keys = Object.keys(groups);
+  if (!S.mailStore || !groups[S.mailStore]) S.mailStore = keys[0];
+  const st = STORES[S.mailStore], list = groups[S.mailStore];
+  const when = new Date(D.end).toLocaleString([], {day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit',hour12:false});
+  const subj = `Visa Payment Configuration Updated – ${st.name} – ${list.map(n=>n.host).join(', ')}`;
+  $('#stage').innerHTML = head('Automated branded store email', 'One email per store, listing only that store’s successfully updated terminals. IT reviews it and sends it from Outlook — nothing is sent automatically.') + `
+    <div class="mail-wrap fade">
+      <div>
+        <div class="card mail-side">
+          <div class="dim" style="font-size:11px;font-weight:700;letter-spacing:.1em;margin-bottom:10px">PREPARED NOTIFICATIONS (${keys.length})</div>
+          ${keys.map(k => `<div class="store-tab ${k===S.mailStore?'on':''}" data-s="${k}"><b>${STORES[k].name}</b><small>${groups[k].length} POS · ${STORES[k].email}</small></div>`).join('')}
+          <div class="dim" style="font-size:12px;margin-top:10px">Store addresses come from Store Management — each POS inherits its store’s email.</div>
+        </div>
+        <div class="card mail-side" style="margin-top:12px;display:grid;gap:8px">
+          <button class="btn primary" id="bEml">Open branded email (.eml)</button>
+          <button class="btn" id="bCopy">Copy email</button>
+          <div class="dim" style="font-size:12px">Demo: buttons show what happens; no message is sent.</div>
+        </div>
+      </div>
+      <div class="mail">
+        <div class="mail-hdr">
+          <div><span>To</span><b>${st.email}</b></div>
+          <div><span>CC</span>it.support@example.com</div>
+          <div><span>Subject</span><b>${esc(subj)}</b></div>
+        </div>
+        <div class="mail-body"><div class="m-card">
+          <div class="m-head"><div class="m-logo">ALSHAYA · LOGO</div><small>Retail IT Support</small></div>
+          <div class="m-in">
+            <p>Dear Store Team,</p>
+            <p>Please be informed that the <b>VISA payment configuration</b> has been successfully updated on the following ${list.length===1?'POS terminal':`<b>${list.length}</b> POS terminals`}:</p>
+            <div class="m-ok">✓ Deployment successfully completed</div>
+            <h5>Deployment Details</h5>
+            <table class="m-tbl">
+              <tr><td class="k">Store Name</td><td><b>${st.name}</b></td></tr>
+              <tr><td class="k">Brand</td><td><b>${st.brand}</b></td></tr>
+              <tr><td class="k">Deployment Reference</td><td><b>Job #${D.jobId}</b></td></tr>
+              <tr><td class="k">Deployment Date & Time</td><td><b>${when}</b></td></tr>
+            </table>
+            <h5>Updated POS Terminal${list.length===1?'':'s'}</h5>
+            <table class="m-tbl">
+              <tr><th>Hostname</th><th>IP Address</th><th>MAC Address</th><th>Configuration File</th><th>Result</th></tr>
+              ${list.map(n => `<tr><td><b>${n.host}</b></td><td style="font-family:Consolas,monospace">${n.ip}</td><td style="font-family:Consolas,monospace">${n.mac}</td><td style="font-size:12px">${esc(n.file)}</td><td style="color:#08745a;font-weight:700">✓ Success</td></tr>`).join('')}
+            </table>
+            <h5>Required Action</h5>
+            <p>Kindly perform a test transaction on ${list.length===1?'the updated POS terminal':'each of the updated POS terminals'} to verify that the VISA payment integration is working correctly.</p>
+            <p>If you experience any issues with VISA payment processing, please contact the IT Support team.</p>
+            <p style="margin-top:16px">Best Regards,<br><b>Retail IT Support</b><br>North Africa Support Team</p>
+          </div>
+          <div class="m-foot">Prepared by POS Enterprise Control Center · Internal use only · <i>Demo content — fictional data</i></div>
+        </div></div>
+      </div>
+    </div>
+    <div class="nav"><button class="btn" id="bBack">← Back</button><button class="btn primary" id="bAgain">↺ Run the demo again</button></div>`;
+  document.querySelectorAll('.store-tab').forEach(t => t.onclick = () => { S.mailStore = t.dataset.s; render(); });
+  $('#bEml').onclick = () => toast('<b>Branded draft downloaded</b><br><span class="muted">In production, Outlook opens it as an editable draft — IT reviews and clicks Send.</span>');
+  $('#bCopy').onclick = () => toast('<b>Email copied</b><br><span class="muted">Plain-text version placed on the clipboard (demo).</span>');
+  $('#bBack').onclick = () => go(4);
+  $('#bAgain').onclick = reset;
+  if (S.auto && keys.length > 1) later(() => { if (S.stage===5) { S.mailStore = keys[1]; render(); } S.auto = false; setAutoBtn(); }, 6000);
+  else if (S.auto) { S.auto = false; setAutoBtn(); }
+}
+
+function setAutoBtn(){ const b = $('#btnAuto'); b.textContent = S.auto ? '⏸ Auto-playing…' : '▶ Auto-play demo'; b.disabled = S.auto; }
+function reset(){ clearTimers(); S = fresh(); setAutoBtn(); render(); }
+function autoplay(){
+  reset(); S.auto = true; setAutoBtn();
+  document.getElementById('demo').scrollIntoView({behavior:'smooth'});
+  later(() => addFiles(SAMPLE.map(s => ({...s}))), 900);
+  const upT = 900 + SAMPLE.length*260 + 3800;
+  later(() => go(1), upT);
+  const valTime = upT + 450 + (SAMPLE.length-1)*380 + 1700;
+  later(() => go(2), valTime + 4000);
+  later(() => { startDeploy(); go(3); }, valTime + 10000);
+}
+$('#btnAuto').onclick = autoplay;
+$('#btnReset').onclick = reset;
+$('#heroStart').onclick = (e) => { e.preventDefault(); autoplay(); };
+render();
+})();
+</script>
+</body>
+</html>

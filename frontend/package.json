@@ -1,0 +1,40 @@
+{
+  "name": "pos-control-center-ui",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "typecheck": "tsc --noEmit",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@mantine/charts": "7.15.2",
+    "@mantine/core": "7.15.2",
+    "@mantine/dates": "7.15.2",
+    "@mantine/dropzone": "7.15.2",
+    "@mantine/form": "7.15.2",
+    "@mantine/hooks": "7.15.2",
+    "@mantine/modals": "7.15.2",
+    "@mantine/notifications": "7.15.2",
+    "@tabler/icons-react": "3.26.0",
+    "@tanstack/react-query": "5.62.8",
+    "axios": "1.7.9",
+    "dayjs": "1.11.13",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "react-router-dom": "6.28.1",
+    "recharts": "2.15.0"
+  },
+  "devDependencies": {
+    "@types/react": "18.3.17",
+    "@types/react-dom": "18.3.5",
+    "@vitejs/plugin-react": "4.3.4",
+    "postcss": "8.4.49",
+    "postcss-preset-mantine": "1.17.0",
+    "postcss-simple-vars": "7.0.1",
+    "typescript": "5.7.2",
+    "vite": "5.4.11"
+  }
+}

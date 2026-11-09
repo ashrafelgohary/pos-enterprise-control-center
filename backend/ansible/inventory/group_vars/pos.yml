@@ -1,0 +1,3 @@
+ansible_python_interpreter: /usr/bin/python
+# POS user has no home directory -> use /tmp for Ansible's working files
+ansible_remote_tmp: /tmp/.ansible-{{ ansible_user | default('ashraf') }}

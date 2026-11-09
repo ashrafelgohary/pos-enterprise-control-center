@@ -1,0 +1,4 @@
+hostname,ip_address,mac_address,store_name,brand,notes
+POS001,10.148.101.11,00:1a:2b:3c:4d:01,HNM Almaza CC,HP,Till 1
+POS002,10.148.101.12,00:1a:2b:3c:4d:02,HNM Almaza CC,HP,Till 2
+POS003,10.148.102.11,00:1a:2b:3c:4d:03,AME City Stars,Toshiba,

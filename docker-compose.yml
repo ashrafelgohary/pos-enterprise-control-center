@@ -1,0 +1,103 @@
+name: poscc
+
+x-backend-env: &backend-env
+  DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-poscc}:${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-poscc}
+  REDIS_URL: redis://:${REDIS_PASSWORD:?set REDIS_PASSWORD}@redis:6379/0
+
+services:
+  postgres:
+    image: ${POSTGRES_IMAGE:-postgres:16-alpine}
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-poscc}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB:-poscc}
+    volumes: [pgdata:/var/lib/postgresql/data]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks: [backend]
+
+  redis:
+    image: ${REDIS_IMAGE:-redis:7-alpine}
+    restart: unless-stopped
+    command: ["redis-server", "--requirepass", "${REDIS_PASSWORD}", "--appendonly", "yes"]
+    volumes: [redisdata:/data]
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli -a \"$${REDIS_PASSWORD}\" --no-auth-warning ping | grep PONG"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks: [backend]
+
+  api:
+    build: { context: ./backend, target: api }
+    image: ${REGISTRY:-local}/poscc-api:${TAG:-1.0.0}
+    restart: unless-stopped
+    env_file: .env
+    environment: *backend-env
+    volumes:
+      - uploads:/data/uploads
+    depends_on:
+      postgres: { condition: service_healthy }
+      redis: { condition: service_healthy }
+    networks: [backend, frontend, egress]
+
+  worker:
+    build: { context: ./backend, target: worker }
+    image: ${REGISTRY:-local}/poscc-worker:${TAG:-1.0.0}
+    restart: unless-stopped
+    command: ["worker"]
+    env_file: .env
+    environment: *backend-env
+    volumes:
+      - uploads:/data/uploads
+      - runs:/data/runs
+      - ./backend/ansible:/ansible:ro          # <-- your existing Ansible project (read-only)
+      - staging:/ansible-staging               # used only if ANSIBLE_STAGE_PATH_TEMPLATE is set
+    secrets: [ansible_ssh_password, ansible_become_password, ansible_ssh_key, ansible_vault_password]
+    depends_on:
+      postgres: { condition: service_healthy }
+      redis: { condition: service_healthy }
+    networks: [backend, egress]                 # egress = route to POS devices
+
+  beat:
+    image: ${REGISTRY:-local}/poscc-worker:${TAG:-1.0.0}
+    restart: unless-stopped
+    command: ["beat"]
+    env_file: .env
+    environment: *backend-env
+    depends_on:
+      worker: { condition: service_started }
+    networks: [backend]
+
+  web:
+    build: { context: ./frontend }
+    image: ${REGISTRY:-local}/poscc-web:${TAG:-1.0.0}
+    restart: unless-stopped
+    ports:
+      - "${HTTP_BIND:-0.0.0.0}:${HTTP_PORT:-8080}:8080"
+    depends_on: [api]
+    networks: [frontend]
+
+secrets:
+  ansible_ssh_password:    { file: ./secrets/ansible_ssh_password }
+  ansible_become_password: { file: ./secrets/ansible_become_password }
+  ansible_ssh_key:         { file: ./secrets/ansible_ssh_key }
+  ansible_vault_password:  { file: ./secrets/ansible_vault_password }
+
+volumes:
+  pgdata:
+  redisdata:
+  uploads:
+  runs:
+  staging:
+
+networks:
+  backend:  { internal: true }   # DB/Redis never reachable from outside
+  frontend: {}
+  egress:   {}

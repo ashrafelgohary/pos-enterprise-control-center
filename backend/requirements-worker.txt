@@ -1,0 +1,5 @@
+-r requirements.txt
+# ansible-core 2.16 still supports Python 2.7 / 3.6 on managed nodes (older POS images).
+# Bump to 2.17+ only if every POS has Python >= 3.7.
+ansible-core==2.16.14
+ansible-runner==2.4.0

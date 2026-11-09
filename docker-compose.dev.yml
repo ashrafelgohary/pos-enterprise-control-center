@@ -1,0 +1,20 @@
+# Development overrides: hot-reload API, expose API/DB locally.
+#   docker compose -f docker-compose.yml -f docker-compose.dev.yml up --build
+#   cd frontend && npm install && npm run dev      -> http://localhost:5173
+services:
+  api:
+    entrypoint: ["sh", "-c", "alembic upgrade head && python -m app.cli bootstrap && uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload"]
+    environment:
+      ENVIRONMENT: development
+      COOKIE_SECURE: "false"
+    volumes:
+      - ./backend/app:/app/app
+      - ./backend/alembic:/app/alembic
+    ports: ["127.0.0.1:8000:8000"]
+    networks: [backend, frontend, egress]
+  worker:
+    volumes:
+      - ./backend/app:/app/app
+  postgres:
+    ports: ["127.0.0.1:5432:5432"]
+    networks: [backend, egress]

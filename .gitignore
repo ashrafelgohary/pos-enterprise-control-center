@@ -1,0 +1,16 @@
+# backups, dumps, archives
+*.bak
+# build output
+dist/
+*.dump
+.env
+node_modules/
+*.pyc
+__pycache__/
+secrets/*
+# secrets & environment
+!secrets/.gitignore
+!secrets/README.md
+*.tar.gz
+*.zip
+*.bak*
